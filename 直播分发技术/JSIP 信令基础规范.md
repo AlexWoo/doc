@@ -17,7 +17,6 @@ JSIP 即 SIP 协议使用 JSON 打包，这里提供一个简版介绍，目的�
 		"Expire":300,
 		"P-Asserted-Identity":"6666@rtc.test.com",
 		"Content-Type":"sdp",
-		"Content-Length":1000,
 		"Body":".....",
 	}
 
@@ -33,7 +32,6 @@ JSIP 即 SIP 协议使用 JSON 打包，这里提供一个简版介绍，目的�
 		"CSeq":1,
 	 	"P-Asserted-Identity":"8888@rtc.test.com",
 		"Content-Type":"sdp",
-		"Content-Length":800,
 		"Body":".....",
 	}
 
@@ -47,7 +45,6 @@ JSIP 即 SIP 协议使用 JSON 打包，这里提供一个简版介绍，目的�
 - To：一般与 Request-URI 一致，如果 Request-URI 发生修改，尽量不要改 To
 - DialogueID：对话号，标识一路会话，相当于 SIP 协议中的 Call-ID + From-Tag + To-Tag
 - CSeq：请求序列，一般在同一个会话下，不同的请求需要有不同的 CSeq，响应使用该 CSeq 与请求关联。CANCEL 特殊，CANCEL 的 CSeq 与其 Cancel 请求的 CSeq
-- Content-Length：消息体长度，如果没有消息体，填为 0
 
 ### 其它重要的头
 
@@ -127,7 +124,6 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"Expire":300,
 			"P-Asserted-Identity":"6666@rtc.test.com",
 			"Content-Type":"sdp",
-			"Content-Length":1000,
 			"Body":".....",
 		}
 
@@ -143,7 +139,6 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"CSeq":1,
 		 	"P-Asserted-Identity":"8888@rtc.test.com",
 			"Content-Type":"sdp",
-			"Content-Length":800,
 			"Body":".....",
 		}
 
@@ -156,7 +151,6 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"To":"room:888@rtc.test.com",
 			"DialogueID":"1f2b38472f596d72",
 			"CSeq":2,
-			"Content-Length":0,
 		}
 
 	此处 Request-URI，From，To 中的值均无意义
@@ -170,7 +164,6 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"To":"room:888@rtc.test.com",
 			"DialogueID":"1f2b38472f596d72",
 			"CSeq":3,
-			"Content-Length":0,
 		}
 
 	此处 Request-URI，From，To 中的值均无意义
@@ -184,8 +177,7 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 		 	"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
 			"DialogueID":"1f2b38472f596d72",
-			"CSeq":4,
-			"Content-Length":0,
+			"CSeq":3,
 		}
 
 6. INVITE
@@ -196,11 +188,10 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
 			"DialogueID":"1f2b38472f596d72",
-			"CSeq":5,
+			"CSeq":4,
 			"Expire":300,
 			"P-Asserted-Identity":"6666@rtc.test.com",
 			"Content-Type":"sdp",
-			"Content-Length":1000,
 			"Body":".....",
 		}
 
@@ -213,10 +204,9 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 		 	"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
 			"DialogueID":"1f2b38472f596d72",
-			"CSeq":5,
+			"CSeq":4,
 		 	"P-Asserted-Identity":"8888@rtc.test.com",
 			"Content-Type":"sdp",
-			"Content-Length":800,
 			"Body":".....",
 		}
 
@@ -228,8 +218,7 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
 			"DialogueID":"1f2b38472f596d72",
-			"CSeq":6,
-			"Content-Length":0,
+			"CSeq":5,
 		}
 
 9. BYE
@@ -240,8 +229,7 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
 			"DialogueID":"1f2b38472f596d72",
-			"CSeq":7,
-			"Content-Length":0,
+			"CSeq":6,
 		}
 
 	此处 Request-URI，From，To 中的值均无意义
@@ -255,13 +243,14 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 		 	"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
 			"DialogueID":"1f2b38472f596d72",
-			"CSeq":7,
-			"Content-Length":0,
+			"CSeq":6,
 		}
 
 #### 聊天室
 
 ![SUBSCRIBE](./imgs/chat.jpg)
+
+对于聊天室，每个 SUBSCRIBE 和 Message 都是独立的消息，可以不使用相同的对话号
 
 1. SUBSCRIBE
 
@@ -274,10 +263,12 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"CSeq":1,
 			"Expire":300,
 			"P-Asserted-Identity":"6666@rtc.test.com",
-			"Content-Length":0,
+			"Event":"message-push"
 		}
 
-2. 200(INVITE)
+	Event 指定为 message-push 事件，表示用户 6666@rtc.test.com 订阅了聊天室 room:888@rtc.test.com 的消息推送
+
+2. 200(SUBSCRIBE)
 
 		{
 		 	"Type":"RESPONSE",
@@ -288,7 +279,6 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"DialogueID":"1f2b38472f596d72",
 			"CSeq":1,
 		 	"P-Asserted-Identity":"8888@rtc.test.com",
-			"Content-Length":0,
 		}
 
 3. MESSAGE
@@ -298,16 +288,15 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"Request-URI":"room:888@rtc.test.com",
 			"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
-			"DialogueID":"1f2b38472f596d72",
-			"CSeq":2,
+			"DialogueID":"1f2b38472f5996127",
+			"CSeq":1,
 			"Expire":300,
 			"P-Asserted-Identity":"6666@rtc.test.com",
-			"Content-Length":70,
 			"Content-Type":"text",
 			"Body":"..."
 		}
 
-4. 200(INVITE)
+4. 200(MESSAGE)
 
 		{
 		 	"Type":"RESPONSE",
@@ -315,10 +304,9 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 		 	"Desc":"OK",
 		 	"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
-			"DialogueID":"1f2b38472f596d72",
-			"CSeq":2,
+			"DialogueID":"1f2b38472f5996127",
+			"CSeq":1,
 		 	"P-Asserted-Identity":"8888@rtc.test.com",
-			"Content-Length":0,
 		}
 
 5. SUBSCRIBE
@@ -328,14 +316,16 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"Request-URI":"room:888@rtc.test.com",
 			"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
-			"DialogueID":"1f2b38472f596d72",
-			"CSeq":3,
+			"DialogueID":"1f2b38472f5996555",
+			"CSeq":1,
 			"Expire":300,
 			"P-Asserted-Identity":"6666@rtc.test.com",
-			"Content-Length":0,
+			"Event":"message-push"
 		}
 
-6. 200(INVITE)
+	为了维护用户的订阅状态，需要在指定 Expire 时间内发送 SUBSCRIBE 刷新订阅状态，一般发送间隔为 Expire 指定时间除 2，本例中客户端需要每 150s 发送一次刷新消息
+
+6. 200(SUBSCRIBE)
 
 		{
 		 	"Type":"RESPONSE",
@@ -343,10 +333,9 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 		 	"Desc":"OK",
 		 	"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
-			"DialogueID":"1f2b38472f596d72",
-			"CSeq":3,
+			"DialogueID":"1f2b38472f5996555",
+			"CSeq":1,
 		 	"P-Asserted-Identity":"8888@rtc.test.com",
-			"Content-Length":0,
 		}
 
 7. MESSAGE
@@ -356,18 +345,17 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"Request-URI":"8888@rtc.test.com",
 			"From":"Bob@rtc.test.com",
 			"To":"room:888@rtc.test.com",
-			"DialogueID":"1f2b38472f596d72",
-			"CSeq":4,
+			"DialogueID":"1f2b38472f593928",
+			"CSeq":1,
 			"Expire":300,
 			"P-Asserted-Identity":"5555@rtc.test.com",
-			"Content-Length":70,
 			"Content-Type":"text",
 			"Body":"..."
 		}
 
 	聊天室向终端用户下发消息时，Request-URI 变换为实际用户的用户 ID，From 保持为消息发送方的昵称，To 保持为会议室 ID
 
-8. 200(INVITE)
+8. 200(MESSAGE)
 
 		{
 		 	"Type":"RESPONSE",
@@ -375,10 +363,9 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 		 	"Desc":"OK",
 		 	"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
-			"DialogueID":"1f2b38472f596d72",
-			"CSeq":4,
+			"DialogueID":"1f2b38472f593928",
+			"CSeq":1,
 		 	"P-Asserted-Identity":"5555@rtc.test.com",
-			"Content-Length":0,
 		}
 
 9. SUBSCRIBE
@@ -388,12 +375,14 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 			"Request-URI":"room:888@rtc.test.com",
 			"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
-			"DialogueID":"1f2b38472f596d72",
-			"CSeq":5,
+			"DialogueID":"1f2b38472f596623",
+			"CSeq":1,
 			"Expire":0,
 			"P-Asserted-Identity":"6666@rtc.test.com",
-			"Content-Length":0,
+			"Event":"message-push"
 		}
+
+	Expire 为 0 表示用户 6666@rtc.test.com 不再订阅该聊天室的消息推送
 
 10. 200(INVITE)
 
@@ -403,8 +392,7 @@ UPDATE 在临时响应阶段用于更新媒体，这个流程中 UPDATE 和其 2
 		 	"Desc":"OK",
 		 	"From":"Alex@rtc.test.com",
 			"To":"room:888@rtc.test.com",
-			"DialogueID":"1f2b38472f596d72",
-			"CSeq":5,
+			"DialogueID":"1f2b38472f596623",
+			"CSeq":1,
 		 	"P-Asserted-Identity":"8888@rtc.test.com",
-			"Content-Length":0,
 		}
