@@ -188,6 +188,10 @@ Dockerfile 可用于构建一个基础镜像，其结构可以分为 5 个部分
 
 ### 运行环境指定
 
+	USER name
+
+USER 指定镜像运行时的用户名
+
 	WORKDIR /path/to/workdir
 
 WORKDIR 指定了镜像中 RUN，CMD，ENTRYPOINT，ADD 和 COPY 的默认执行路径
@@ -217,3 +221,25 @@ ENV 指定容器对外暴露的环境变量
 	ENTRYPOINT command param1 param2 (shell form)
 
 CMD 只能存在一条，如果指定了多条，以最后一条为准，ENTRYPOINT 和 CMD 同时存在时，以 ENTRYPOINT 指定内容为执行程序，以 CMD 指定内容为执行程序参数
+
+### Dockerfile 实例
+
+1. 我们希望某些应用运行于非 root 账户下，可以使用 USER 和 WORKDIR 配合达到这个效果，[Dockerfile](./alexwoo/Dockerfile) 内容如下
+
+		FROM centos
+		MAINTAINER alexwoo<wj19840501@gmail.com>
+		RUN useradd alexwoo
+		WORKDIR /home/alexwoo
+		USER alexwoo
+
+	构建镜像：
+
+		docker build -t alexwoo/centos ./
+
+	接入镜像，我们发现当前账户为 alexwoo，目录为 /home/alexwoo
+
+		wujiedeMacBook-Pro:centos_user wujie$ docker run -it --rm alexwoo/centos /bin/bash
+		[alexwoo@ba1fb74545ac ~]$ pwd
+		/home/alexwoo
+		[alexwoo@ba1fb74545ac ~]$ whoami
+		alexwoo
