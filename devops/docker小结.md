@@ -52,6 +52,10 @@ docker 镜像存储上是一个分层结构，举个简单例子，我们要创�
 
 	删除本地镜像
 
+	删除所有本地镜像：
+	
+		docker rmi `docker images -qa`
+
 - docker push IMAGE[:TAG]
 
 	将本地镜像推送到远程仓库，后面会在镜像构建中进行介绍
@@ -71,6 +75,17 @@ docker 镜像存储上是一个分层结构，举个简单例子，我们要创�
 
 	对于 docker run 还有一个重要参数是 --rm，指定该参数后，当容器退出后会删除该容器
 
+	几个重要的参数：
+	
+	- -d：容器后台运行
+	- --rm：退出后，删除容器，不能与 -d 同时使用
+	- --name：指定容器的名字，不指定，将随机分配一个名字，在生产环境中建议都加上该参数
+	- --restart：
+		- no 容器挂掉后不重启，默认为该值
+		- on-failure 非正常退出才重启，on-failure:3，可像这样指定重试次数
+		- always 容器退出后总是重启
+		- unless-stopped 除守护进程停止容器外，容器退出均重启。在生产环境中，对于需要长时间运行的服务，一般都使用这个重启选项
+
 - docker exec -it CONTAINER COMMAND [ARG...]
 
 	该命令有其它参数，但是我们常用的是 -i -t，简写为 -it，一般使用该命令介入到正在运行的容器中执行某个命令。如 docker exec -it /bin/bash，可以接入到某个以 Linux 为基础运行的容器的 shell 中
@@ -82,6 +97,14 @@ docker 镜像存储上是一个分层结构，举个简单例子，我们要创�
 - docker rm CONTAINER
 
 	删除容器
+
+	删除已停止的容器：
+
+		docker container prune
+
+	删除所有容器：
+
+		docker rm `docker ps -qa`
 
 ## 镜像构建
 ### 使用容器方式
